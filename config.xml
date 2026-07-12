@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.belajar.musicplayer" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <!-- Nama aplikasi saat diinstall di HP -->
+    <name>Blue Hour Player</name>
+    
+    <description>
+        Aplikasi pemutar musik estetik bertema dark mode.
+    </description>
+    
+    <author email="developer@pemula.com" href="http://cordova.io">
+        Tim Developer Android
+    </author>
+    
+    <!-- File utama yang pertama kali dibuka aplikasi -->
+    <content src="www/index.html" />
+    
+    <!-- Izin Akses Internet & Keamanan Jaringan untuk Streaming -->
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-navigation href="http://*/*" />
+    <allow-navigation href="https://*/*" />
+    
+    <preference name="KeepRunning" value="true" />
+</widget>
