@@ -1,0 +1,48 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ "main", "master" ] # Robot jalan setiap kali ada update kode
+  workflow_dispatch: # Biar bisa kita klik "Run" manual
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Source Code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js Environment
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: Setup Java JDK
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '11'
+
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+
+    - name: Install Cordova
+      run: npm install -g cordova
+
+    - name: Create Cordova Project & Build APK
+      run: |
+        cordova create output_app com.belajar.musicplayer MusicPlayer
+        rm -rf output_app/www output_app/config.xml
+        cp -r www output_app/
+        cp config.xml output_app/
+        cd output_app
+        cordova platform add android
+        cordova build android --device
+
+    - name: Upload APK Result
+      uses: actions/upload-artifact@v4
+      with:
+        name: BlueHourPlayer-APK
+        path: output_app/platforms/android/app/build/outputs/apk/debug/app-debug.apk
+        
