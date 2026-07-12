@@ -27,6 +27,7 @@ jobs:
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
 
+    # Langkah tambahan untuk menyetujui semua lisensi Android SDK otomatis
     - name: Accept Android Licenses
       run: yes | sdkmanager --licenses || true
 
@@ -40,6 +41,7 @@ jobs:
         cp -r www output_app/
         cp config.xml output_app/
 
+    # Di sini kita lepas versi android-nya agar otomatis menyesuaikan sistem terbaru
     - name: Build Android Platform
       run: |
         cd output_app
