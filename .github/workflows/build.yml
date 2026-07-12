@@ -1,9 +1,9 @@
-name: Build Android APK
+name: Build Android APK Fixed
 
 on:
   push:
-    branches: [ "main", "master" ] # Robot jalan setiap kali ada update kode
-  workflow_dispatch: # Biar bisa kita klik "Run" manual
+    branches: [ "main", "master" ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -16,13 +16,13 @@ jobs:
     - name: Setup Node.js Environment
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '20' # Menggunakan Node LTS terbaru
 
     - name: Setup Java JDK
       uses: actions/setup-java@v4
       with:
-        distribution: 'zulu'
-        java-version: '11'
+        distribution: 'temurin'
+        java-version: '17' # Java 17 lebih stabil untuk Android SDK modern
 
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
@@ -30,19 +30,21 @@ jobs:
     - name: Install Cordova
       run: npm install -g cordova
 
-    - name: Create Cordova Project & Build APK
+    - name: Create Cordova Project
       run: |
         cordova create output_app com.belajar.musicplayer MusicPlayer
         rm -rf output_app/www output_app/config.xml
         cp -r www output_app/
         cp config.xml output_app/
+
+    - name: Build Android Platform
+      run: |
         cd output_app
-        cordova platform add android
-        cordova build android --device
+        cordova platform add android@12.0.0 --no-telemetry # Mengunci versi platform Android agar stabil
+        cordova build android --device --no-telemetry
 
     - name: Upload APK Result
       uses: actions/upload-artifact@v4
       with:
         name: BlueHourPlayer-APK
         path: output_app/platforms/android/app/build/outputs/apk/debug/app-debug.apk
-        
